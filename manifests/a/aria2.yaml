@@ -1,0 +1,30 @@
+# ==========================================
+# METADATA & INDEXING (Extract on Build)
+# ==========================================
+Id: aria2.aria2
+Name: Aria2
+Version: '1.37'
+Publisher: Tatsuhiro Tsujikawa
+Description: Downloader with a high speed & split connection
+Aliases:
+  - aria2
+  - aria2c
+Url: https://github.com/aria2/aria2/releases/download/release-1.37.0/aria2-1.37.0-win-64bit-build1.zip
+
+# ==========================================
+# INSTALLATION HANDLING (PowerShell CLI Only)
+# ==========================================
+ArchiveType: nested
+OutName: aria2-1.37.0-win-64bit-build1.zip
+OutDir: '<TempDir>'
+OutPath: '<TempDir>\aria2-1.37.0-win-64bit-build1.zip'
+DownloadMethod: invoke
+ExtractMethod: 7z
+
+InstallType: portable
+ExtractDir: '<TempDir>\aria2-1.37.0-win-64bit-build1'
+InstallDir: '<LocalDir>\aria2'
+ExecutablePath: '<LocalDir>\aria2\aria2c.exe'
+
+ShortcutType: shim
+ShortcutName: aria2c

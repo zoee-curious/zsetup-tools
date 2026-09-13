@@ -1,0 +1,7 @@
+.local
+.sync/**/cache
+.sync/index.js
+.vscode
+.wrangler
+node_modules
+.env

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "7zip.7zip",
+    "name": "7-Zip",
+    "version": "26.03",
+    "publisher": "Igor Pavlov",
+    "description": "Archiver with a high compression ratio",
+    "aliases": [
+      "7-zip",
+      "7zip",
+      "7z"
+    ],
+    "url": "https://github.com/ip7z/7zip/releases/download/26.03/7z2603-x64.exe",
+    "path": "manifests/7/7zip.yaml"
+  },
+  {
+    "id": "aria2.aria2",
+    "name": "Aria2",
+    "version": "1.37",
+    "publisher": "Tatsuhiro Tsujikawa",
+    "description": "Downloader with a high speed & split connection",
+    "aliases": [
+      "aria2",
+      "aria2c"
+    ],
+    "url": "https://github.com/aria2/aria2/releases/download/release-1.37.0/aria2-1.37.0-win-64bit-build1.zip",
+    "path": "manifests/a/aria2.yaml"
+  }
+]
