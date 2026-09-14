@@ -6,11 +6,12 @@ import {
 } from '../services/manifest.service.js';
 
 export const putManifest = async (c: Context) => {
+  const validKey = c.get('validKey');
   const isPrivate = c.get('isPrivate');
   try {
     const { path, content } = await c.req.json();
-    if (!path || !content) {
-      return c.json({ error: 'Invalid payload' }, 400);
+    if (!validKey || !path || !content) {
+      return c.json({ error: 'Unauthorized or Invalid payload' }, 401);
     }
 
     const targetBucket = isPrivate ? c.env.BUCKET_PRIVATE : c.env.BUCKET_PUBLIC;

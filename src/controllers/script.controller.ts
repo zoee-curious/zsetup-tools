@@ -6,11 +6,10 @@ import {
 
 export const putScript = async (c: Context) => {
   const validKey = c.get('validKey');
-
   try {
     const { path, content } = await c.req.json();
     if (!validKey || !path || !content) {
-      return c.json({ error: 'Invalid payload' }, 400);
+      return c.json({ error: 'Unauthorized or Invalid payload' }, 401);
     }
 
     await c.env.BUCKET_PUBLIC.put(path, content);

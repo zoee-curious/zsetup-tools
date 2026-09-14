@@ -5,5 +5,6 @@
 .wrangler
 node_modules
 .env
+.env.worker
 assets_private
 manifests_private
