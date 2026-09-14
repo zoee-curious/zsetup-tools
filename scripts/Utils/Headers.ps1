@@ -9,7 +9,7 @@ function Get-Headers {
     if (Test-Path $ConfigFile) {
         $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
         
-        if ($Config.PSObject.Properties['cache'] -and $Config.cache -eq $false) {
+        if ($Config.ignoreCache) {
             $Headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
             $Headers["Pragma"] = "no-cache"
         }
@@ -33,28 +33,11 @@ function Get-Aria2Headers {
         [string]$Source
     )
 
-    if ($Source -eq 'public') {
-        return
-    }
-
+    $Headers = Get-Headers -Source $Source
     $AriaHeaders = @()
-    $ConfigFile = Join-Path $HOME ".zsetup"
 
-    if (Test-Path $ConfigFile) {
-        $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
-        
-        if ($Config.apiKey) {
-            $AriaHeaders += "--header=x-api-key: $($Config.apiKey)"
-        }
-
-        if ($Source) {
-            $AriaHeaders += "--header=x-visability: $($Source)"
-        }
-        else {
-            if ($Config.source) {
-                $AriaHeaders += "--header=x-visability: $($Config.source)"
-            }
-        }
+    foreach ($Key in $Headers.Keys) {
+        $AriaHeaders += "--header=`"${Key}: $($Headers[$Key])`""
     }
     return $AriaHeaders
 }

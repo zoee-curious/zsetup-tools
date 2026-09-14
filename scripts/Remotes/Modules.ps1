@@ -1,7 +1,8 @@
 function Get-Modules {
     param (
         [string]$BaseUrl,
-        [string]$RootPath
+        [string]$RootPath,
+        [psobject]$Headers
     )
     
     $RequireScripts = @(
@@ -26,7 +27,7 @@ function Get-Modules {
         $ProgressPreference = 'SilentlyContinue'
         foreach ($Script in $RequireScripts) {
             $ScriptUrl = "$BaseUrl/getScript/$Script"
-            Invoke-Expression (Invoke-RestMethod -Uri $ScriptUrl)
+            Invoke-Expression (Invoke-RestMethod -Uri $ScriptUrl -Headers $Headers)
         }
         $ProgressPreference = 'Continue'
     }
@@ -66,7 +67,8 @@ function Get-Required {
 
 function Get-Installing {
     param (
-        [string]$BaseUrl
+        [string]$BaseUrl,
+        [psobject]$Headers
     )
 
     Get-Required -BaseUrl $BaseUrl
@@ -93,7 +95,7 @@ function Get-Installing {
         $ScriptUrl = "$BaseUrl/getScript/$Script"
         $ParentDir = Split-Path $LocalPath -Parent
         New-Dir -Paths $ParentDir
-        Invoke-RestMethod -Uri $ScriptUrl -OutFile $LocalPath
+        Invoke-RestMethod -Uri $ScriptUrl -Headers $Headers -OutFile $LocalPath
     }
     $ProgressPreference = 'Continue'
 
