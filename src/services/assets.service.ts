@@ -41,14 +41,14 @@ export async function getAssetCache(c: Context, fileName: string) {
 
 export async function getIndexAssetCache(c: Context) {
   const isPrivate = c.get('isPrivate');
-  const ignoreCache = c.get('ignoreCache');
+  const noCache = c.get('noCache');
 
   const cache = caches.default;
   const baseUrl = new URL(c.req.url).origin;
   const cacheScope = isPrivate ? 'private' : 'public';
   const cacheKey = new Request(`${baseUrl}/getIndexAsset/${cacheScope}`);
 
-  if (!ignoreCache) {
+  if (!noCache) {
     const cachedResponse = await cache.match(cacheKey);
     if (cachedResponse) {
       return cachedResponse;

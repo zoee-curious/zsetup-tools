@@ -1,13 +1,14 @@
 function Test-Command {
     param (
         [string]$Action,
-        [string]$Name
+        [string]$Name,
+        [switch]$Help
     )
 
     $invalidAction = [string]::IsNullOrWhiteSpace($Action) -or ($Action -eq "{{ACTION}}")
     $invalidName = [string]::IsNullOrWhiteSpace($Name) -or ($Name -eq "{{NAME}}")
 
-    if ($invalidAction -or $invalidName) {
+    if ($invalidAction -or $invalidName -or $Help) {
         Show-Help
         exit
     }

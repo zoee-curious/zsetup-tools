@@ -2,17 +2,16 @@ import { Context } from 'hono';
 import { load } from 'js-yaml';
 
 export async function getManifestCache(c: Context, name: string) {
+  const noCache = c.get('noCache');
   const isPrivate = c.get('isPrivate');
-  const ignoreCache = c.get('ignoreCache');
 
   const cache = caches.default;
   const baseUrl = new URL(c.req.url).origin;
-  const cacheScope = isPrivate ? 'private' : 'public';
   const cacheKey = new Request(
-    `${baseUrl}/getManifest/${name.toLowerCase()}/${cacheScope}`,
+    `${baseUrl}/getManifest/${name.toLowerCase()}/${c.get('cacheScope')}`,
   );
 
-  if (!ignoreCache) {
+  if (!noCache) {
     const cachedResponse = await cache.match(cacheKey);
     if (cachedResponse) {
       return cachedResponse;
@@ -57,15 +56,16 @@ export async function getManifestCache(c: Context, name: string) {
 }
 
 export async function getIndexManifestCache(c: Context) {
+  const noCache = c.get('noCache');
   const isPrivate = c.get('isPrivate');
-  const ignoreCache = c.get('ignoreCache');
 
   const cache = caches.default;
   const baseUrl = new URL(c.req.url).origin;
-  const cacheScope = isPrivate ? 'private' : 'public';
-  const cacheKey = new Request(`${baseUrl}/getIndexManifest/${cacheScope}`);
+  const cacheKey = new Request(
+    `${baseUrl}/getIndexManifest/${c.get('cacheScope')}`,
+  );
 
-  if (!ignoreCache) {
+  if (!noCache) {
     const cachedResponse = await cache.match(cacheKey);
     if (cachedResponse) {
       return cachedResponse;

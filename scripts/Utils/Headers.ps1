@@ -1,43 +1,48 @@
 function Get-Headers {
     param (
-        [string]$Source
+        [switch]$Private,
+        [switch]$NoCache
     )
 
     $Headers = @{}
     $ConfigFile = Join-Path $HOME ".zsetup"
 
     if (Test-Path $ConfigFile) {
-        $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
-        
-        if ($Config.ignoreCache) {
-            $Headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-            $Headers["Pragma"] = "no-cache"
-        }
+        try {
+            $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
+            if ($Config.apiKey) { $Headers["x-api-key"] = $Config.apiKey }
 
-        if ($Config.apiKey) {
-            $Headers["x-api-key"] = $Config.apiKey
-        }
+            if ($Private) { $Headers["x-scope"] = 'private' }
+            elseif ($Config.scope) { $Headers["x-scope"] = $Config.scope }
 
-        if ($Source) {
-            $Headers["x-visability"] = $Source
+            if ($NoCache) {
+                $Headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                $Headers["Pragma"] = "no-cache"
+            }
+            elseif ($Config.noCache) {
+                $Headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                $Headers["Pragma"] = "no-cache"
+            } 
         }
-        elseif ($Config.source) {
-            $Headers["x-visability"] = $Config.source
-        }
+        catch {}
     }
     return $Headers
 }
 
 function Get-Aria2Headers {
     param (
-        [string]$Source
+        [switch]$Private,
+        [switch]$NoCache
     )
-
-    $Headers = Get-Headers -Source $Source
+    
     $AriaHeaders = @()
+    $Headers = Get-Headers -Private:$Private -NoCache:$NoCache
 
-    foreach ($Key in $Headers.Keys) {
-        $AriaHeaders += "--header=`"${Key}: $($Headers[$Key])`""
+    try {
+        foreach ($Key in $Headers.Keys) {
+            $AriaHeaders += "--header=`"${Key}: $($Headers[$Key])`""
+        }
     }
+    catch {}
     return $AriaHeaders
 }

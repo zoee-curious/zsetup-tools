@@ -5,12 +5,12 @@ export async function getScriptCache(
   scriptPath: string,
   transform?: (text: string) => string,
 ) {
-  const ignoreCache = c.get('ignoreCache');
+  const noCache = c.get('noCache');
 
   const cache = caches.default;
   const cacheKey = new Request(c.req.url, c.req.raw);
 
-  if (!ignoreCache) {
+  if (!noCache) {
     const cachedResponse = await cache.match(cacheKey);
     if (cachedResponse) {
       return cachedResponse;

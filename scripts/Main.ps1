@@ -1,7 +1,9 @@
 param (
     [string]$Action = "{{ACTION}}",
     [string]$Name = "{{NAME}}",
-    [string]$Source
+    [switch]$Private,
+    [switch]$NoCache,
+    [switch]$Help
 )
 
 $BaseUrl = "https://zoee.fun"
@@ -12,12 +14,19 @@ function Get-BootstrapHeaders {
     if (Test-Path $ConfigFile) {
         try {
             $Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
-            if ($Config.ignoreCache) {
+            if ($Config.apiKey) { $Headers["x-api-key"] = $Config.apiKey }
+
+            if ($Private) { $Headers["x-scope"] = 'private' }
+            elseif ($Config.scope) { $Headers["x-scope"] = $Config.scope }
+
+            if ($NoCache) {
                 $Headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
                 $Headers["Pragma"] = "no-cache"
             }
-            if ($Config.apiKey) { $Headers["x-api-key"] = $Config.apiKey }
-            if ($Config.source) { $Headers["x-visability"] = $Config.source }
+            elseif ($Config.noCache) {
+                $Headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+                $Headers["Pragma"] = "no-cache"
+            } 
         }
         catch {}
     }
@@ -36,7 +45,7 @@ else {
 }
 
 Clear-Shims
-Test-Command -Action $Action -Name $Name
+Test-Command -Action $Action -Name $Name -Help:$Help
 
 switch ($Action) {
     'search' {
