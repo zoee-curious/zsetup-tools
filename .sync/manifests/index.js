@@ -46,7 +46,7 @@ export async function syncManifests({
   endpoint = '/putManifest',
   build = true,
   upload = true,
-  forced = false,
+  forced = process.env.FORCE_SYNC === 'true',
   indexPath = 'manifests/manifests-index.json',
   visability = 'public',
   apiUrl = API_URL,

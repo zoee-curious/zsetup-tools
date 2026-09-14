@@ -23,25 +23,25 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .sync/scripts/cache/cache-hash.json
-          key: sync-scripts-hash-${{ runner.os }}-${{ github.sha }}
+          key: sync-scripts-hash-${{ github.ref_name }}-${{ runner.os }}-${{ github.sha }}
           restore-keys: |
-            sync-scripts-hash-${{ runner.os }}-
+            sync-scripts-hash-${{ github.ref_name }}-${{ runner.os }}-
 
       - name: Cache Sync Hashes Manifests
         uses: actions/cache@v4
         with:
           path: .sync/manifests/cache/cache-hash.json
-          key: sync-manifests-hash-${{ runner.os }}-${{ github.sha }}
+          key: sync-manifests-hash-${{ github.ref_name }}-${{ runner.os }}-${{ github.sha }}
           restore-keys: |
-            sync-manifests-hash-${{ runner.os }}-
+            sync-manifests-hash-${{ github.ref_name }}-${{ runner.os }}-
 
       - name: Cache Sync Hashes Assets
         uses: actions/cache@v4
         with:
           path: .sync/assets/cache/cache-hash.json
-          key: sync-assets-hash-${{ runner.os }}-${{ github.sha }}
+          key: sync-assets-hash-${{ github.ref_name }}-${{ runner.os }}-${{ github.sha }}
           restore-keys: |
-            sync-assets-hash-${{ runner.os }}-
+            sync-assets-hash-${{ github.ref_name }}-${{ runner.os }}-
 
       - name: Install Dependencies
         run: npm ci
@@ -58,6 +58,7 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
           API_URL: ${{ github.ref_name == 'main' && vars.API_URL || vars.STAGING_API_URL }}
           BUCKET_PUBLIC_NAME: ${{ github.ref_name == 'main' && vars.BUCKET_PUBLIC_NAME || vars.STAGING_BUCKET_PUBLIC_NAME }}
+          FORCE_SYNC: ${{ github.ref_name != 'main' }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

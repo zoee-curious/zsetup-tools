@@ -43,7 +43,7 @@ function calculateHash(content) {
 export async function syncScripts({
   globPattern = 'scripts/**/*.ps1',
   endpoint = '/putScript',
-  forced = false,
+  forced = process.env.FORCE_SYNC === 'true',
   apiUrl = API_URL,
   apiKey = API_KEY,
 } = {}) {

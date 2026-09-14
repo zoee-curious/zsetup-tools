@@ -45,7 +45,7 @@ export async function syncAssets({
   endpoint = '/putAssetIndex',
   build = true,
   upload = true,
-  forced = false,
+  forced = process.env.FORCE_SYNC === 'true',
   indexPath = 'assets/assets-index.json',
   visability = 'public',
   apiUrl = API_URL,
