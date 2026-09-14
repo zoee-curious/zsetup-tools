@@ -53,6 +53,6 @@ switch ($Action) {
 
     'install' {
         Get-Required -BaseUrl $BaseUrl
-        Get-Install -BaseUrl $BaseUrl -Name $Name -Source $Source
+        Get-Install -BaseUrl $BaseUrl -Name $Name -Source $Source -Headers (Get-BootstrapHeaders)
     }
 }

@@ -137,13 +137,14 @@ function Get-Install {
     param (
         [string]$BaseUrl,
         [string]$Name,
-        [string]$Source
+        [string]$Source,
+        [psobject]$Headers
     )
 
     switch ($Name) {
         'update' {
             $ProgressPreference = 'SilentlyContinue'
-            Invoke-Expression (Invoke-RestMethod -Uri "$BaseUrl/install")
+            Invoke-Expression (Invoke-RestMethod -Uri "$BaseUrl/install" -Headers $Headers)
             $ProgressPreference = 'Continue'
             return
         }
