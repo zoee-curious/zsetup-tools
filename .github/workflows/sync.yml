@@ -67,6 +67,8 @@ jobs:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
+      - name: Wait for Cloudflare Routing
+        run: sleep 10
       - name: Run Build & Sync
         env:
           FORCE_SYNC: ${{ github.ref_name != 'main' }}
