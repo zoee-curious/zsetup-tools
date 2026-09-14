@@ -43,7 +43,7 @@ function Get-Search {
     }
     catch {
         Write-FormattedRow -Text "Not found!", ": $Name" -Color Yellow
-        exit 1
+        return
     }
 
     $Results = $Index | Where-Object {
@@ -54,7 +54,7 @@ function Get-Search {
 
     if (-not $Results -or $Results.Count -eq 0) {
         Write-FormattedRow -Text "Not found!", ": $Name" -Color Yellow
-        exit
+        return
     }
 
     $Widths = @(35, 24, 10, 40)
@@ -114,7 +114,7 @@ function Set-Source {
         }
     }
     Write-FormattedRow -Text "Not found!", ": $Name" -Color Yellow
-    exit 1
+    return
 }
 
 function Get-Show {
