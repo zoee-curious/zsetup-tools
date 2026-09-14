@@ -15,7 +15,7 @@
   ],
   "routes": [
     {
-      "pattern": "zoee.fun/*",
+      "pattern": "zoee.fun",
       "custom_domain": true,
     },
   ],
@@ -34,7 +34,7 @@
       ],
       "routes": [
         {
-          "pattern": "staging.zoee.fun/*",
+          "pattern": "staging.zoee.fun",
           "custom_domain": true,
         },
       ],
