@@ -25,5 +25,18 @@
     ],
     "url": "https://github.com/aria2/aria2/releases/download/release-1.37.0/aria2-1.37.0-win-64bit-build1.zip",
     "path": "manifests/a/aria2.yaml"
+  },
+  {
+    "id": "OpenMedia.4KVideoDownloaderPlus",
+    "name": "4K Video Downloader+",
+    "version": "26.3.2",
+    "publisher": "OpenMedia",
+    "description": "Social media video downloader (e.g YouTube)",
+    "aliases": [
+      "4k-video-downloader+",
+      "4k-video+"
+    ],
+    "url": "https://dl.4kdownload.com/app/4kvideodownloaderplus_26.3.2_x64_online.exe",
+    "path": "manifests/4/4k-video-downloader+.yaml"
   }
 ]

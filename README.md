@@ -37,7 +37,7 @@ You don't need to install `zsetup-tools` to use its package manifests! You can e
 
 ```powershell
 # Syntax
-irm zoee.fun/install/<app-name> | iex
+irm zoee.fun/install/<name> | iex
 
 # Example: Install aria2 directly
 irm zoee.fun/install/aria2 | iex

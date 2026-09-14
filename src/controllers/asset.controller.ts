@@ -27,10 +27,8 @@ export const putAssetIndex = async (c: Context) => {
 export const getAsset = async (c: Context) => {
   const rawFileName = c.req.path.replace(/^\/download\//, '');
   const fileName = decodeURIComponent(rawFileName);
-  const isPrivate = c.get('isPrivate');
-
   try {
-    const assetUrl = await getAssetCache(c, fileName, isPrivate);
+    const assetUrl = await getAssetCache(c, fileName);
     if (!assetUrl) {
       return c.json({ error: `${fileName} Not found!` }, 404);
     }
@@ -42,10 +40,8 @@ export const getAsset = async (c: Context) => {
 };
 
 export const getIndexAsset = async (c: Context) => {
-  const isPrivate = c.get('isPrivate');
-
   try {
-    return await getIndexAssetCache(c, isPrivate);
+    return await getIndexAssetCache(c);
   } catch (error: any) {
     return c.json({ error: error.message }, 500);
   }

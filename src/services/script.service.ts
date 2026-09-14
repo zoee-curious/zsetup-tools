@@ -5,11 +5,16 @@ export async function getScriptCache(
   scriptPath: string,
   transform?: (text: string) => string,
 ) {
+  const ignoreCache = c.get('ignoreCache');
+
   const cache = caches.default;
   const cacheKey = new Request(c.req.url, c.req.raw);
-  const cachedResponse = await cache.match(cacheKey);
-  if (cachedResponse) {
-    return cachedResponse;
+
+  if (!ignoreCache) {
+    const cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
   }
 
   try {
@@ -21,9 +26,9 @@ export async function getScriptCache(
     const headers = new Headers();
     script.writeHttpMetadata(headers);
     headers.set('Content-Type', 'text/plain; charset=utf-8');
-    headers.set('Cache-Control', 'public, max-age=86400');
+    headers.set('Cache-Control', 'public, max-age=3600');
 
-    let response;
+    let response: Response;
     if (transform) {
       const originalText = await script.text();
       const modifiedText = transform(originalText);

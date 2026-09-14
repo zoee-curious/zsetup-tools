@@ -13,4 +13,19 @@
       "binding": "BUCKET_PRIVATE",
     },
   ],
+  "env": {
+    "staging": {
+      "name": "zsetup-tools-staging",
+      "r2_buckets": [
+        {
+          "bucket_name": "zsetup-public-staging",
+          "binding": "BUCKET_PUBLIC",
+        },
+        {
+          "bucket_name": "zsetup-private-staging",
+          "binding": "BUCKET_PRIVATE",
+        },
+      ],
+    },
+  },
 }

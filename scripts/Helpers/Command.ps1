@@ -9,7 +9,7 @@ function Test-Command {
 
     if ($invalidAction -or $invalidName) {
         Show-Help
-        exit 0
+        exit
     }
 }
 
@@ -54,10 +54,10 @@ function Get-Search {
 
     if (-not $Results -or $Results.Count -eq 0) {
         Write-FormattedRow -Text "Not found!", ": $Name" -Color Yellow
-        exit 1
+        exit
     }
 
-    $Widths = @(25, 18, 10, 40)
+    $Widths = @(35, 24, 10, 40)
     $TotalWidth = ($Widths | Measure-Object -Sum).Sum
 
     Write-FormattedRow -Text "ID", "Name", "Version", "Description" -Width $Widths

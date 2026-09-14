@@ -1,0 +1,24 @@
+# ==========================================
+# METADATA & INDEXING (Extract on Build)
+# ==========================================
+Id: OpenMedia.4KVideoDownloaderPlus
+Name: 4K Video Downloader+
+Version: '26.3.2'
+Publisher: OpenMedia
+Description: Social media video downloader (e.g YouTube)
+Aliases:
+  - 4k-video-downloader+
+  - 4k-video+
+Url: https://dl.4kdownload.com/app/4kvideodownloaderplus_26.3.2_x64_online.exe
+
+# ==========================================
+# INSTALLATION HANDLING (PowerShell CLI Only)
+# ==========================================
+ArchiveType: none
+OutName: 4kvideodownloaderplus_26.3.2_x64_online.exe
+OutDir: '<TempDir>'
+OutPath: '<TempDir>\4kvideodownloaderplus_26.3.2_x64_online.exe'
+DownloadMethod: invoke
+
+InstallType: installer
+ExecutablePath: '<TempDir>\4kvideodownloaderplus_26.3.2_x64_online.exe'

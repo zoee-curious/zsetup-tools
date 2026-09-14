@@ -7,7 +7,6 @@ import {
 
 export const putManifest = async (c: Context) => {
   const isPrivate = c.get('isPrivate');
-
   try {
     const { path, content } = await c.req.json();
     if (!path || !content) {
@@ -26,20 +25,16 @@ export const putManifest = async (c: Context) => {
 
 export const getManifest = async (c: Context) => {
   const name = c.req.param('name');
-  const isPrivate = c.get('isPrivate');
-
   try {
-    return await getManifestCache(c, name as string, isPrivate);
+    return await getManifestCache(c, name as string);
   } catch (error: any) {
     return c.json({ error: error.message }, 500);
   }
 };
 
 export const getIndexManifest = async (c: Context) => {
-  const isPrivate = c.get('isPrivate');
-
   try {
-    return await getIndexManifestCache(c, isPrivate);
+    return await getIndexManifestCache(c);
   } catch (error: any) {
     return c.json({ error: error.message }, 500);
   }

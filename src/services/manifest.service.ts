@@ -1,11 +1,10 @@
 import { Context } from 'hono';
 import { load } from 'js-yaml';
 
-export async function getManifestCache(
-  c: Context,
-  name: string,
-  isPrivate: boolean,
-) {
+export async function getManifestCache(c: Context, name: string) {
+  const isPrivate = c.get('isPrivate');
+  const ignoreCache = c.get('ignoreCache');
+
   const cache = caches.default;
   const baseUrl = new URL(c.req.url).origin;
   const cacheScope = isPrivate ? 'private' : 'public';
@@ -13,12 +12,14 @@ export async function getManifestCache(
     `${baseUrl}/getManifest/${name.toLowerCase()}/${cacheScope}`,
   );
 
-  const cachedResponse = await cache.match(cacheKey);
-  if (cachedResponse) {
-    return cachedResponse;
+  if (!ignoreCache) {
+    const cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
   }
 
-  const indexResponse = await getIndexManifestCache(c, isPrivate);
+  const indexResponse = await getIndexManifestCache(c);
   const manifestList: any[] = await indexResponse.json();
 
   const targetName = name.toLowerCase();
@@ -41,33 +42,34 @@ export async function getManifestCache(
   }
 
   if (!manifestObject) {
-    return c.json(
-      { error: `File manifest for ${name} not found in storage!` },
-      404,
-    );
+    return c.json({ error: `${name} Not found in storage!` }, 404);
   }
 
   const rawYaml = await manifestObject.text();
   const manifestData = load(rawYaml);
 
   const response = c.json(manifestData, 200, {
-    'Cache-Control': 'public, max-age=86400',
+    'Cache-Control': 'public, max-age=3600',
   });
 
   c.executionCtx.waitUntil(cache.put(cacheKey, response.clone()));
   return response;
 }
 
-export async function getIndexManifestCache(c: Context, isPrivate: boolean) {
+export async function getIndexManifestCache(c: Context) {
+  const isPrivate = c.get('isPrivate');
+  const ignoreCache = c.get('ignoreCache');
+
   const cache = caches.default;
   const baseUrl = new URL(c.req.url).origin;
   const cacheScope = isPrivate ? 'private' : 'public';
   const cacheKey = new Request(`${baseUrl}/getIndexManifest/${cacheScope}`);
 
-  const cachedResponse = await cache.match(cacheKey);
-  if (cachedResponse) {
-    console.log(cacheKey);
-    return cachedResponse;
+  if (!ignoreCache) {
+    const cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
   }
 
   const [publicObject, privateObject] = await Promise.all([
@@ -93,7 +95,7 @@ export async function getIndexManifestCache(c: Context, isPrivate: boolean) {
   const finalIndex = Array.from(indexMap.values());
 
   const response = c.json(finalIndex, 200, {
-    'Cache-Control': 'public, max-age=86400',
+    'Cache-Control': 'public, max-age=3600',
   });
 
   c.executionCtx.waitUntil(cache.put(cacheKey, response.clone()));

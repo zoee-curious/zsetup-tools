@@ -12,12 +12,10 @@ const getS3Client = (env: any) =>
     },
   });
 
-export async function getAssetCache(
-  c: Context,
-  fileName: string,
-  isPrivate: boolean,
-) {
-  const indexResponse = await getIndexAssetCache(c, isPrivate);
+export async function getAssetCache(c: Context, fileName: string) {
+  const isPrivate = c.get('isPrivate');
+
+  const indexResponse = await getIndexAssetCache(c);
   const indexMap: Record<string, string> = await indexResponse.json();
 
   const assetPath = indexMap[fileName];
@@ -41,15 +39,20 @@ export async function getAssetCache(
   return await getSignedUrl(s3, command, { expiresIn: 900 });
 }
 
-export async function getIndexAssetCache(c: Context, isPrivate: boolean) {
+export async function getIndexAssetCache(c: Context) {
+  const isPrivate = c.get('isPrivate');
+  const ignoreCache = c.get('ignoreCache');
+
   const cache = caches.default;
   const baseUrl = new URL(c.req.url).origin;
   const cacheScope = isPrivate ? 'private' : 'public';
   const cacheKey = new Request(`${baseUrl}/getIndexAsset/${cacheScope}`);
 
-  const cachedResponse = await cache.match(cacheKey);
-  if (cachedResponse) {
-    return cachedResponse;
+  if (!ignoreCache) {
+    const cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
   }
 
   const [publicObject, privateObject] = await Promise.all([
@@ -65,7 +68,7 @@ export async function getIndexAssetCache(c: Context, isPrivate: boolean) {
   const finalIndex = Object.assign({}, publicIndex, privateIndex);
 
   const response = c.json(finalIndex, 200, {
-    'Cache-Control': 'public, max-age=86400',
+    'Cache-Control': 'public, max-age=3600',
   });
 
   c.executionCtx.waitUntil(cache.put(cacheKey, response.clone()));
