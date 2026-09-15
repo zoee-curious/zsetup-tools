@@ -8,3 +8,4 @@ node_modules
 .env.worker
 assets_private
 manifests_private
+temp
