@@ -1,9 +1,3 @@
-$manifest = Get-Manifest -Name 'aria2'
-$manifestData = Expand-Path -Path $manifest
-Write-Host $manifestData
-
-exit
-
 Clear-Shims
 Test-Command -Action $Action -Name $Name -Help:$Help
 

@@ -42,12 +42,12 @@ function Copy-Items {
 }
 
 
-function Expand-Path {
+function Expand-Manifest {
     param (
-        [psobject]$Path
+        [psobject]$Manifest
     )
-
-    $maps = @{
+    
+    $replacements = @{
         '<BaseDir>'    = $BaseDir
         '<ShimsDir>'   = $ShimsDir
         '<ScriptsDir>' = $ScriptsDir
@@ -55,10 +55,20 @@ function Expand-Path {
         '<TempDir>'    = $TempDir
     }
 
-    foreach ($map in $maps.GetEnumerator()) {
-        $Path = $Path.Replace($map.key, $map.Value)
+    $clone = $Manifest.psobject.Copy()
+    foreach ($prop in $clone.psobject.properties) {
+        if ($prop.Value -is [string]) {
+            $val = $prop.Value
+            
+            foreach ($entry in $replacements.GetEnumerator()) {
+                if ($null -ne $entry.Value) {
+                    $val = $val.Replace($entry.Key, $entry.Value)
+                }
+            }
+            $prop.Value = $val
+        }
     }
-    return $Path
+    return $clone
 }
 
 
@@ -175,7 +185,9 @@ function Get-Manifest {
     try {
         $uri = "$BaseUrl/getManifest/$Name"
         $headers = Get-Headers @getHeadersParams
-        Invoke-RestMethod -Uri $uri -Headers $headers
+        $manifest = Invoke-RestMethod -Uri $uri -Headers $headers
+        $manifestData = Expand-Manifest -Manifest $manifest
+        return $manifestData
     }
     catch {
         return $null
@@ -567,7 +579,7 @@ function Write-Manifest {
         [psobject]$Manifest
     )
     
-    $manifestMap = [ordered]@{
+    $manifestMaps = [ordered]@{
         "ID"               = $Manifest.Id
         "Name"             = $Manifest.Name
         "Version"          = $Manifest.Version
@@ -592,9 +604,9 @@ function Write-Manifest {
     
     if ($Manifest) {
         Write-Host
-        foreach ($obj in $manifestMap.GetEnumerator()) {
-            if ($obj.Value) {
-                Write-FormattedRow -Text $obj.Key, ": $(Expand-Path -Path $obj.Value)"
+        foreach ($entry in $manifestMaps.GetEnumerator()) {
+            if ($entry.Value) {
+                Write-FormattedRow -Text $entry.Key, ": $($entry.Value)"
             }
         }
         Write-Host
@@ -602,12 +614,6 @@ function Write-Manifest {
     return
 }
 
-
-$manifest = Get-Manifest -Name 'aria2'
-$manifestData = Expand-Path -Path $manifest
-Write-Host $manifestData
-
-exit
 
 Clear-Shims
 Test-Command -Action $Action -Name $Name -Help:$Help

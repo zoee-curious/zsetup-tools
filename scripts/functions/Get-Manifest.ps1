@@ -17,7 +17,9 @@ function Get-Manifest {
     try {
         $uri = "$BaseUrl/getManifest/$Name"
         $headers = Get-Headers @getHeadersParams
-        Invoke-RestMethod -Uri $uri -Headers $headers
+        $manifest = Invoke-RestMethod -Uri $uri -Headers $headers
+        $manifestData = Expand-Manifest -Manifest $manifest
+        return $manifestData
     }
     catch {
         return $null

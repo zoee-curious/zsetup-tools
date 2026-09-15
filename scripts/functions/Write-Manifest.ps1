@@ -3,7 +3,7 @@ function Write-Manifest {
         [psobject]$Manifest
     )
     
-    $manifestMap = [ordered]@{
+    $manifestMaps = [ordered]@{
         "ID"               = $Manifest.Id
         "Name"             = $Manifest.Name
         "Version"          = $Manifest.Version
@@ -28,9 +28,9 @@ function Write-Manifest {
     
     if ($Manifest) {
         Write-Host
-        foreach ($obj in $manifestMap.GetEnumerator()) {
-            if ($obj.Value) {
-                Write-FormattedRow -Text $obj.Key, ": $(Expand-Path -Path $obj.Value)"
+        foreach ($entry in $manifestMaps.GetEnumerator()) {
+            if ($entry.Value) {
+                Write-FormattedRow -Text $entry.Key, ": $($entry.Value)"
             }
         }
         Write-Host
