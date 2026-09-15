@@ -3,13 +3,13 @@ function Write-Manifest {
         [psobject]$Manifest
     )
     
-    $ManifestMap = [ordered]@{
+    $manifestMap = [ordered]@{
         "ID"               = $Manifest.Id
         "Name"             = $Manifest.Name
         "Version"          = $Manifest.Version
         "Publisher"        = $Manifest.Publisher
         "Description"      = $Manifest.Description
-        "Aliases"          = $Manifest.Aliases
+        "Aliases"          = ($Manifest.Aliases -join ", ")
         "URL"              = $Manifest.Url
         "Archive Type"     = $Manifest.ArchiveType
         "Output Name"      = $Manifest.OutName
@@ -25,26 +25,15 @@ function Write-Manifest {
         "Shortcut Type"    = $Manifest.ShortcutType
         "Shortcut Name"    = $Manifest.ShortcutName
     }
-
-    Write-Host
+    
     if ($Manifest) {
-        foreach ($item in $ManifestMap.GetEnumerator()) {
-            if ($item.Value) {
-                Write-FormattedRow -Text $item.Key, ": $(Expand-Path -Path $item.Value)" -Width 20
+        Write-Host
+        foreach ($obj in $manifestMap.GetEnumerator()) {
+            if ($obj.Value) {
+                Write-FormattedRow -Text $obj.Key, ": $(Expand-Path -Path $obj.Value)"
             }
         }
+        Write-Host
     }
-    Write-Host
     return
-}
-
-function Get-Manifest {
-    param (
-        [string]$Uri,
-        [string]$Source
-    )
-    
-    $ProgressPreference = 'SilentlyContinue'
-    Invoke-RestMethod -Uri $Uri -Headers (Get-Headers -Source $Source) -ErrorAction Stop        
-    $ProgressPreference = 'Continue'
 }
