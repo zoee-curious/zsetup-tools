@@ -1,0 +1,21 @@
+{
+  "name": "zsetup-tools",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --env-file .env.dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1128.0",
+    "@aws-sdk/s3-request-presigner": "^3.1128.0",
+    "dotenv": "^17.4.2",
+    "glob": "^13.0.6",
+    "hono": "^4.13.7",
+    "js-yaml": "^5.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.5.0",
+    "wrangler": "^4.110.0"
+  }
+}

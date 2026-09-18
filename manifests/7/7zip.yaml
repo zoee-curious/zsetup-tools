@@ -1,0 +1,31 @@
+# ==========================================
+# METADATA & INDEXING
+# ==========================================
+Id: 7zip.7zip
+Name: 7-Zip
+Version: '26.03'
+Publisher: Igor Pavlov
+Description: Archiver with a high compression ratio
+Aliases:
+  - 7-zip
+  - 7zip
+  - 7z
+Url: https://github.com/ip7z/7zip/releases/download/26.03/7z2603-x64.exe
+
+# ==========================================
+# INSTALLATION HANDLING
+# ==========================================
+ArchiveType: flat
+OutName: 7z2603-x64.exe
+OutDir: '<TempDir>'
+OutPath: '<TempDir>\7z2603-x64.exe'
+DownloadMethod: invoke
+ExtractMethod: tar
+
+InstallType: portable
+ExtractDir: '<TempDir>\7zip'
+InstallDir: '<LocalDir>\7zip'
+ExecutablePath: '<LocalDir>\7zip\7z.exe'
+
+ShortcutType: shim
+ShortcutName: 7z

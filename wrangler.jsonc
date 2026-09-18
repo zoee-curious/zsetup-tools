@@ -1,0 +1,43 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "zsetup-tools",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-09",
+  "r2_buckets": [
+    {
+      "bucket_name": "zsetup-public",
+      "binding": "BUCKET_PUBLIC",
+    },
+    {
+      "bucket_name": "zsetup-private",
+      "binding": "BUCKET_PRIVATE",
+    },
+  ],
+  "routes": [
+    {
+      "pattern": "zoee.fun",
+      "custom_domain": true,
+    },
+  ],
+  "env": {
+    "staging": {
+      "name": "zsetup-tools-staging",
+      "r2_buckets": [
+        {
+          "bucket_name": "zsetup-public-staging",
+          "binding": "BUCKET_PUBLIC",
+        },
+        {
+          "bucket_name": "zsetup-private-staging",
+          "binding": "BUCKET_PRIVATE",
+        },
+      ],
+      "routes": [
+        {
+          "pattern": "staging.zoee.fun",
+          "custom_domain": true,
+        },
+      ],
+    },
+  },
+}

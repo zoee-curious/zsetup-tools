@@ -1,0 +1,12 @@
+.local
+.sync/**/cache/cache-hash.json
+.vscode
+.wrangler
+assets_private
+assets/assets-index.json
+manifests_private
+manifests/manifests-index.json
+manifests/manifests-search-index.json
+node_modules
+.env*
+scripts/zst.ps1
